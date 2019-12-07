@@ -9,15 +9,46 @@ SCREENHEIGHT = 511
 GROUNDY = SCREENHEIGHT * 0.8  #base.png 80% height
 GAME_SPRITES = {} #images used in game
 GAME_SOUNDS = {}  #sounds used in game
+
 #initialising the images rendered in the game
-PLAYER = 'gallery/sprites/bird.png'
-BACKGROUND = 'gallery/sprites/background.png'
-PIPE = 'gallery/sprites/pipe.png'
+class images:
+  def __init__(self):
+    self.Playerimg=['gallery/sprites/bird.png']
+    self.Bkgimg = ['gallery/sprites/background.png']
+    self.Pipeimg = ['gallery/sprites/pipe.png']
+  def playerimg(self):
+    return self.Playerimg[0]
+  def backgroundimg(self):
+    return random.choice(self.Bkgimg)
+  def pipeimg(self):
+    return random.choice(self.Pipeimg)
+
+img=images()
+PLAYER= img.playerimg()
+BACKGROUND= img.backgroundimg()
+PIPE= img.pipeimg()
+
+class Point_Queue:
+  def __init__(self):
+    self.queue=[]
+
+  def __len__(self):
+    return len(self.queue)
+
+  def enqueque(self,score):
+    self.score=score
+    self.queue.append(self.score)
+
+  def dequeue(self):
+    for points in range(len(self)):
+      return self.queue.pop(points)
+
 
 
 
 class Buffalo_Wing:
   def __init__(self):
+    self.scorequeue=Point_Queue()
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
     #This will be the main point from where game will start
@@ -142,9 +173,11 @@ class Buffalo_Wing:
             self.pipeMidPos = pipe['x'] + GAME_SPRITES['pipe'][0].get_width()/2
             if self.pipeMidPos<= self.playerMidPos < self.pipeMidPos +4:
                 self.score +=1
+                self.scorequeue.enqueque(self.score)
                 print(f"Your score is {self.score}") 
                 GAME_SOUNDS['point'].play()
-                self.incSpeed()
+                if self.score>5:
+                  self.incSpeed()
 
 
         if self.playerVelY <self.playerMaxVelY and not self.playerFlapped:
@@ -193,14 +226,14 @@ class Buffalo_Wing:
         self.FPSCLOCK.tick(self.FPS)
 
   def incSpeed(self):
-    if self.score>6 and self.score<10:
-      self.FPS = 32+10   #frames per second
+    if self.score>=6 and self.score<10:
+      self.FPS = 32+8   #frames per second
     elif self.score>10 and self.score<15:
-      self.FPS = 32+15
+      self.FPS = 32+12
     elif self.score>15 and self.score<20:
-      self.FPS = 32+20
+      self.FPS = 32+18
     elif self.score>20:
-      self.FPS = 32+25
+      self.FPS = 32+20
     return
 
 
@@ -242,14 +275,15 @@ class Buffalo_Wing:
       return self.pipe
 
 def stages():
-  x=0
-  while x < 6:
+  chances=0
+  while chances < 6:
     if obj.crashTest==True:
-      x+=1
+      chances+=1
       objB=Buffalo_Wing()
 
 obj=Buffalo_Wing()
 stages()
+
 
 
 
