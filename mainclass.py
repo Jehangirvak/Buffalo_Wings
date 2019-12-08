@@ -13,21 +13,27 @@ GAME_SOUNDS = {}  #sounds used in game
 #initialising the images rendered in the game
 class images:
   def __init__(self):
-    self.Playerimg=['gallery/sprites/bird.png']
-    self.Bkgimg = ['gallery/sprites/background.png']
-    self.Pipeimg = ['gallery/sprites/pipe.png']
+    self.Playerimg=['gallery/sprites/bird.png']  #list of different avatar images
+    self.Pipeimg = ['gallery/sprites/pipe.png']  #list of different obstacle images
+
   def playerimg(self):
+    """
+    Returns the image of avatar that player chose
+    """
     return self.Playerimg[0]
-  def backgroundimg(self):
-    return random.choice(self.Bkgimg)
+    
   def pipeimg(self):
+    """
+    Returns a random image of obstacle
+    """
     return random.choice(self.Pipeimg)
 
 img=images()
 PLAYER= img.playerimg()
-BACKGROUND= img.backgroundimg()
+BACKGROUND= 'gallery/sprites/background.png'
 PIPE= img.pipeimg()
 
+#added queue data structure to points on the basis of FIFO rule
 class Point_Queue:
   def __init__(self):
     self.queue=[]
@@ -36,10 +42,16 @@ class Point_Queue:
     return len(self.queue)
 
   def enqueque(self,score):
+    """
+    Add points to queue list
+    """
     self.score=score
     self.queue.append(self.score)
 
   def dequeue(self):
+    """
+    Remove points from queue list
+    """
     for points in range(len(self)):
       return self.queue.pop(points)
 
@@ -117,6 +129,9 @@ class Buffalo_Wing:
                 self.FPSCLOCK.tick(self.FPS)
 
   def mainGame(self):
+    """
+    The main game function
+    """
     self.score = 0
     #adjusting inital position of birdy
     self.playerx = int(SCREENWIDTH/5)
@@ -226,6 +241,9 @@ class Buffalo_Wing:
         self.FPSCLOCK.tick(self.FPS)
 
   def incSpeed(self):
+    """
+    To increase the speed with respect to increasing score
+    """
     if self.score>=6 and self.score<10:
       self.FPS = 32+8   #frames per second
     elif self.score>10 and self.score<15:
@@ -238,6 +256,9 @@ class Buffalo_Wing:
 
 
   def isCollide(self,playerx, playery, upperPipes, lowerPipes):
+    """
+    Collison conditions with ground and obstacles
+    """
     self.playerx=playerx
     self.playery=playery
     self.upperPipes=upperPipes
@@ -275,9 +296,15 @@ class Buffalo_Wing:
       return self.pipe
 
 def stages():
+  """
+  Generate 5 chances of the player
+  """
+  BACKGROUNDlist=[] #list of different backgrounds
   chances=0
   while chances < 6:
     if obj.crashTest==True:
+      global BACKGROUND
+      BACKGROUND=BACKGROUNDlist[chances]
       chances+=1
       objB=Buffalo_Wing()
 
