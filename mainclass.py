@@ -4,9 +4,9 @@ import pygame
 from pygame.locals import * # Basic pygame imports
 
 # Global Variables for the game
-SCREENWIDTH = 289
-SCREENHEIGHT = 511
-GROUNDY = SCREENHEIGHT * 0.8  #base.png 80% height
+SCREENWIDTH = 320
+SCREENHEIGHT = 560
+GROUNDY = SCREENHEIGHT * 0.84  #base.png 84% height
 GAME_SPRITES = {} #images used in game
 GAME_SOUNDS = {}  #sounds used in game
 
