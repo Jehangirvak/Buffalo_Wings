@@ -2,6 +2,7 @@ import random # For generating random numbers
 import sys # We will use sys.exit to exit the program
 import pygame
 from pygame.locals import * # Basic pygame imports
+from tkinter import *
 
 # Global Variables for the game
 SCREENWIDTH = 320
@@ -13,14 +14,14 @@ GAME_SOUNDS = {}  #sounds used in game
 #initialising the images rendered in the game
 class images:
   def __init__(self):
-    self.Playerimg=['gallery/sprites/bird.png']  #list of different avatar images
+    self.Playerimg=[('gallery/sprites/bird.png',25),('gallery/sprites/bull-big.png',45)]  #list of tuples containing avatar images and their base values
     self.Pipeimg = ['gallery/sprites/pipe.png']  #list of different obstacle images
 
-  def playerimg(self):
+  def playerimg_base(self):
     """
     Returns the image of avatar that player chose
     """
-    return self.Playerimg[0]
+    return self.Playerimg[1]
     
   def pipeimg(self):
     """
@@ -29,7 +30,8 @@ class images:
     return random.choice(self.Pipeimg)
 
 img=images()
-PLAYER= img.playerimg()
+PLAYER= img.playerimg_base()[0]
+BASE=img.playerimg_base()[1]         #the base of the avatar 
 BACKGROUND= 'gallery/sprites/background.png'
 PIPE= img.pipeimg()
 
@@ -52,21 +54,30 @@ class Point_Queue:
     """
     Remove points from queue list
     """
-    for points in range(len(self)):
-      return self.queue.pop(points)
+    point=self.queue.pop(0)  
+    return point
 
+  def traverse(self):
+    """
+    To display the pointes collected by the user
+    """
+    x=1
+    for points in self.queue:
+      statement= 'The score of round '+str(x)+' is: '+str(points)+'!'
+      x+=1
+      return statement
 
 
 
 class Buffalo_Wing:
+  scorequeue=Point_Queue()
   def __init__(self):
-    self.scorequeue=Point_Queue()
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
     #This will be the main point from where game will start
     pygame.init() #Initialize all pygame's modules
     self.FPSCLOCK = pygame.time.Clock() #to control fps 
-    pygame.display.set_caption('Flappy Bird by HibJehZay')
+    pygame.display.set_caption('BUFFALO WINGS')
     #adding keys values to dictionary
     GAME_SPRITES['numbers'] = ( 
         pygame.image.load('gallery/sprites/0.png').convert_alpha(),
@@ -179,6 +190,8 @@ class Buffalo_Wing:
         #This function will return true if the player is crashed
         self.crashTest = self.isCollide(self.playerx, self.playery, self.upperPipes, self.lowerPipes) 
         if self.crashTest:
+            Buffalo_Wing.scorequeue.enqueque(self.score)
+            print(f"Your score is {self.score}")
             return     
 
         #check for score
@@ -187,9 +200,7 @@ class Buffalo_Wing:
         for pipe in self.upperPipes:
             self.pipeMidPos = pipe['x'] + GAME_SPRITES['pipe'][0].get_width()/2
             if self.pipeMidPos<= self.playerMidPos < self.pipeMidPos +4:
-                self.score +=1
-                self.scorequeue.enqueque(self.score)
-                print(f"Your score is {self.score}") 
+                self.score +=1 
                 GAME_SOUNDS['point'].play()
                 if self.score>5:
                   self.incSpeed()
@@ -263,7 +274,7 @@ class Buffalo_Wing:
     self.playery=playery
     self.upperPipes=upperPipes
     self.lowerPipes=lowerPipes
-    if self.playery> GROUNDY - 25  or self.playery<0:
+    if self.playery> GROUNDY - BASE  or self.playery<0:
         GAME_SOUNDS['hit'].play()
         return True
     
@@ -295,22 +306,83 @@ class Buffalo_Wing:
       ]
       return self.pipe
 
+
+'''This class displays the total score to the user'''
+class Score(Frame): 
+    def __init__(self,master):
+        Frame.__init__(self,master)
+        Frame.config(self,width=150,height=200,bg="cyan")
+        self.master=master
+        self.score= 0
+        self.depends=str()
+        self.master.title("BUFFALO WINGS")
+        self.scoreque=Buffalo_Wing.scorequeue
+        self.buttons()
+        self.pack()
+        
+    '''this function holding conditions on the basis of score'''
+    def condition(self):
+        for rounds in range(self.scoreque.__len__()):
+          indiv_score = self.scoreque.dequeue()
+          self.score=self.score+indiv_score
+          statement= 'The score of round '+str(rounds+1)+' is: '+str(indiv_score)+'!'
+          self.depends=self.depends+'\n'+str(statement)
+        if self.score>=25:
+            self.depends=self.depends+'\n'+"WELL PLAYED! with a great total score of "+str(self.score)
+        elif self.score>=20:
+            self.depends=self.depends+'\n'+"Nicely played! with a total score of " + str(self.score)
+        elif self.score>=15:
+            self.depends=self.depends+'\n'+"Good! your total score is "+ str(self.score)
+        elif self.score>=10:
+            self.depends=self.depends+'\n'+"Average! your total score is "+ str(self.score)
+        elif self.score<5:
+            self.depends=self.depends+'\n'+"Poorly played! your total score is "+ str(self.score)
+          
+    
+    '''to display the buttons'''
+    def buttons(self):
+        self.condition()
+        self.message2 = Label(self, text=self.depends ,width=50
+             ,height=15,font=25,bg="green",fg='white')
+        self.Order2 = Button(self, text='CLOSE',height=5,width=10,
+               font=6,bg="red",fg='yellow' ,command=self.terminate)
+        self.Order2.pack(side='right',fill=Y)
+        self.Order3 = Button(self, text='PLAY AGAIN',height=3,width=10,
+               font=6,bg="lightblue",fg='purple' ,command=self.play_again)
+        self.Order3.pack(side="left",fill=Y)
+        self.message2.pack(fill=X)
+    
+     
+    ''' A terminate button'''
+    def terminate(self):
+        self.master.destroy() #current game window destroy
+
+    '''If the user wants to play again'''
+    def play_again(self):
+        self.master.destroy()
+        objB=Buffalo_Wing()
+        stages()
+
 def stages():
   """
   Generate 5 chances of the player
   """
-  BACKGROUNDlist=[] #list of different backgrounds
+  BACKGROUNDlist=[('gallery/sprites/bg1.png')] #list of different backgrounds
   chances=0
-  while chances < 6:
+  while chances <2 :
     if obj.crashTest==True:
       global BACKGROUND
-      BACKGROUND=BACKGROUNDlist[chances]
+      BACKGROUND=BACKGROUNDlist[0]
       chances+=1
       objB=Buffalo_Wing()
+  else:
+    high=Tk()
+    high.geometry('600x200+350+100')
+    high.resizable(0,0)
+    high.attributes("-topmost",True)
+    a=Score(high)
+    high.mainloop()
+    
 
 obj=Buffalo_Wing()
 stages()
-
-
-
-
