@@ -14,14 +14,15 @@ GAME_SOUNDS = {}  #sounds used in game
 #initialising the images rendered in the game
 class images:
   def __init__(self):
-    self.Playerimg=[('gallery/sprites/bird.png',25),('gallery/sprites/bull-big.png',45)]  #list of tuples containing avatar images and their base values
+    self.Playerimg=[('gallery/sprites/bird.png',25),('gallery/sprites/bull-big.png',45), ('gallery/sprites/smile1.png',60),
+     ('gallery/sprites/smile2.png',60), ('gallery/sprites/smile3.png',60), ('gallery/sprites/smile7.png',60)]  #list of tuples containing avatar images and their base values
     self.Pipeimg = ['gallery/sprites/pipe.png']  #list of different obstacle images
 
   def playerimg_base(self):
     """
     Returns the image of avatar that player chose
     """
-    return self.Playerimg[1]
+    return self.Playerimg[4]
     
   def pipeimg(self):
     """
@@ -30,7 +31,6 @@ class images:
     return random.choice(self.Pipeimg)
 
 img=images()
-PLAYER= img.playerimg_base()[0]
 BASE=img.playerimg_base()[1]         #the base of the avatar 
 BACKGROUND= 'gallery/sprites/background.png'
 PIPE= img.pipeimg()
@@ -72,6 +72,8 @@ class Point_Queue:
 class Buffalo_Wing:
   scorequeue=Point_Queue()
   def __init__(self):
+    self.PLAYER= img.playerimg_base()[0]
+    self.crash_avatar=['gallery/sprites/smile5.png','gallery/sprites/smile4.png']
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
     #This will be the main point from where game will start
@@ -99,7 +101,7 @@ class Buffalo_Wing:
     pygame.image.load(PIPE).convert_alpha()
     ) #two elements in tuple, to rotate the pipe
     GAME_SPRITES['background'] = pygame.image.load(BACKGROUND).convert()
-    GAME_SPRITES['player'] = pygame.image.load(PLAYER).convert_alpha()
+    GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
 
       # Game sounds
     GAME_SOUNDS['die'] = pygame.mixer.Sound('gallery/audio/die.wav')
@@ -117,7 +119,7 @@ class Buffalo_Wing:
     """
 
     self.playerx = int(SCREENWIDTH/5) #adds the bird at the 1/5th of screen self.width
-    self.playery = int((SCREENHEIGHT - GAME_SPRITES['player'].get_height())/2) #makes the bird centre position, (total height- bird pic height)/2
+    self.playery = int((SCREENHEIGHT - GAME_SPRITES['player'].get_height())/2) #makes the avatar centre position, (total height- avatar pic height)/2
     self.messagex = int((SCREENWIDTH - GAME_SPRITES['message'].get_width())/2)
     self.messagey = int(SCREENHEIGHT*0.13)
     self.basex = 0 #the base image is always on 0 of x
@@ -276,17 +278,32 @@ class Buffalo_Wing:
     self.lowerPipes=lowerPipes
     if self.playery> GROUNDY - BASE  or self.playery<0:
         GAME_SOUNDS['hit'].play()
+        if BASE != 25 and BASE != 45 :
+          self.PLAYER='gallery/sprites/smile6.png' 
+          GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
+          self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
+          pygame.display.update()
         return True
     
     for pipe in self.upperPipes:
         self.pipeHeight = GAME_SPRITES['pipe'][0].get_height()
         if(self.playery < self.pipeHeight + pipe['y'] and abs(self.playerx - pipe['x']) < GAME_SPRITES['pipe'][0].get_width()):
             GAME_SOUNDS['hit'].play()
+            if BASE != 25 and BASE != 45 :
+              self.PLAYER=random.choice(self.crash_avatar)
+              GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
+              self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
+              pygame.display.update()
             return True
 
     for pipe in self.lowerPipes:
         if (self.playery + GAME_SPRITES['player'].get_height() > pipe['y']) and abs(self.playerx - pipe['x']) < GAME_SPRITES['pipe'][0].get_width():
             GAME_SOUNDS['hit'].play()
+            if BASE != 25 and BASE != 45 :
+              self.PLAYER=random.choice(self.crash_avatar)
+              GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
+              self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
+              pygame.display.update()
             return True
 
     return False
