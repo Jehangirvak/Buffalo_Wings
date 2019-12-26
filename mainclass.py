@@ -22,7 +22,7 @@ class images:
     """
     Returns the image of avatar that player chose
     """
-    return self.Playerimg[4]
+    return self.Playerimg[1]
     
   def pipeimg(self):
     """
@@ -76,6 +76,7 @@ class Buffalo_Wing:
     self.crash_avatar=['gallery/sprites/smile5.png','gallery/sprites/smile4.png']
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
+    GAME_SPRITES['message'] =pygame.image.load('gallery/sprites/message.png').convert_alpha()
     #This will be the main point from where game will start
     pygame.init() #Initialize all pygame's modules
     self.FPSCLOCK = pygame.time.Clock() #to control fps 
@@ -121,7 +122,7 @@ class Buffalo_Wing:
     self.playerx = int(SCREENWIDTH/5) #adds the bird at the 1/5th of screen self.width
     self.playery = int((SCREENHEIGHT - GAME_SPRITES['player'].get_height())/2) #makes the avatar centre position, (total height- avatar pic height)/2
     self.messagex = int((SCREENWIDTH - GAME_SPRITES['message'].get_width())/2)
-    self.messagey = int(SCREENHEIGHT*0.13)
+    self.messagey = int(SCREENHEIGHT*0.01)
     self.basex = 0 #the base image is always on 0 of x
     while True:
         for event in pygame.event.get():  #monitors all button clicks
