@@ -401,9 +401,7 @@ class Score1:
           self.score=self.score+indiv_score
           self.statement= 'The score of round '+str(rounds+1)+' is: '+str(indiv_score)+'!'
           self.depends=self.depends+'\n'+self.statement
-          L=L.append(self.depends)
-          print(L)
-          
+          L.append(self.statement)
           if self.score>=25:
               self.depends=self.depends+'\n'+"WELL PLAYED! with a great total score of "+str(self.score)
           elif self.score>=20:
@@ -414,7 +412,6 @@ class Score1:
               self.depends=self.depends+'\n'+"Average! your total score is "+ str(self.score)
           elif self.score<5:
               self.depends=self.depends+'\n'+"Poorly played! your total score is "+ str(self.score)
-
     def endwin(self):
         self.window.fill((255,255,255))
         self.image = pygame.image.load('gallery/sprites/bg.png').convert_alpha()
@@ -424,7 +421,7 @@ class Score1:
         self.name=pygame.image.load('gallery/sprites/name.png').convert_alpha()
         self.window.blit( self.name,[150,10])
         self.condition()
-        self.surfacefont=self.Font.render(self.depends,True,(255,16,0))
+        self.surfacefont=self.Font.render(self.statement,True,(255,16,0))
         self.surfacer=self.surfacefont.get_rect()
         self.surfacer.center=(200,200)
         self.window.blit(self.surfacefont,self.surfacer)
@@ -457,9 +454,9 @@ class Score1:
                 else:
                     play_again=Button((204,16,0),180,420,90,30,'PLAY AGAIN')
                 if 320+60>pos[0]>320 and 420+30>pos[1]>420:
-                    close=Button((214,37,30),320,420,60,30,'CLOSE')
+                    close=Button((204,16,30),320,420,60,30,'CLOSE')
                 else:
-                    close=Button((204,16,0),320,420,60,30,'CLOSE')
+                    close=Button((214,37,0),320,420,60,30,'CLOSE')
             pygame.display.update()
 
 def stages():
