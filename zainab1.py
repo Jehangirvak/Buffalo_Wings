@@ -386,22 +386,23 @@ class Score1:
         self.window =pygame.display.set_mode((600,500))
         self.sound=pygame.mixer.Sound('gallery/audio/groove.wav')
         self.Font=pygame.font.SysFont('snapITC',20)
-        self.play_again=Button((204,16,0),180,420,90,30,'PLAY AGAIN')
-        self.close=Button((204,16,0),320,420,60,30,'CLOSE')
+        self.play_again=Button((202,0,0),180,420,90,30,'PLAY AGAIN')
+        self.close=Button((202,0,0),320,420,60,30,'CLOSE')
         self.depends=str()
         self.statement=str()
         self.score= 0
         self.scoreque=Buffalo_Wing.scorequeue
+        self.condition()
         
     '''this function holding conditions on the basis of score'''
     def condition(self):
-        L=[]
+        self.L=[]
         for rounds in range(self.scoreque.__len__()):
           indiv_score = self.scoreque.dequeue()
           self.score=self.score+indiv_score
           self.statement= 'The score of round '+str(rounds+1)+' is: '+str(indiv_score)+'!'
           self.depends=self.depends+'\n'+self.statement
-          L.append(self.statement)
+          self.L.append(self.statement)
           if self.score>=25:
               self.depends=self.depends+'\n'+"WELL PLAYED! with a great total score of "+str(self.score)
           elif self.score>=20:
@@ -412,6 +413,7 @@ class Score1:
               self.depends=self.depends+'\n'+"Average! your total score is "+ str(self.score)
           elif self.score<5:
               self.depends=self.depends+'\n'+"Poorly played! your total score is "+ str(self.score)
+          print(self.L)
     def endwin(self):
         self.window.fill((255,255,255))
         self.image = pygame.image.load('gallery/sprites/bg.png').convert_alpha()
@@ -420,13 +422,20 @@ class Score1:
         self.close.draw(self.window,10,(249,248,194))
         self.name=pygame.image.load('gallery/sprites/name.png').convert_alpha()
         self.window.blit( self.name,[150,10])
-        self.condition()
-        self.surfacefont=self.Font.render(self.statement,True,(255,16,0))
+        self.surfacefont=self.Font.render(self.L[0],True,(255,16,0))
         self.surfacer=self.surfacefont.get_rect()
-        self.surfacer.center=(200,200)
+        self.surfacer.center=(250,200)
         self.window.blit(self.surfacefont,self.surfacer)
+        self.surfacefont_1=self.Font.render(self.L[1],True,(255,16,0))
+        self.surfacer_1=self.surfacefont_1.get_rect()
+        self.surfacer_1.center=(250,250)
+        self.window.blit(self.surfacefont_1,self.surfacer_1)
+        self.surfacefont_2=self.Font.render(self.L[2],True,(255,16,0))
+        self.surfacer_2=self.surfacefont_2.get_rect()
+        self.surfacer_2.center=(250,300)
+        self.window.blit(self.surfacefont_2,self.surfacer_2)
+    def while_loop(self):
         
-    def while_loop(self):    
         x=True
         while x:
             self.endwin()
@@ -437,11 +446,11 @@ class Score1:
                     pygame.quit()
                     sys.exit()
                 if event.type==pygame.MOUSEBUTTONDOWN:
-                    if play_again.IsOver(pos):
+                    if self.play_again.IsOver(pos):
                         pygame.mixer.Sound('gallery/audio/groove.wav')
                         print("clicked!!!")
                         pygame.mixer.Sound.play(sound)
-                    if close.IsOver(pos):
+                    if self.close.IsOver(pos):
                         pygame.mixer.Sound('gallery/audio/groove.wav')
                         print("clicked!!!")
                         pygame.mixer.Sound.play(sound)
@@ -450,13 +459,13 @@ class Score1:
                         sys.exit()
                         pygame.display.update()
                 if 180+90>pos[0]> 180 and 420+30>pos[1]> 420: 
-                   play_again=Button((214,37,30),180,420,90,30,'PLAY AGAIN')
+                   self.play_again=Button((77,226,13),180,420,90,30,'PLAY AGAIN')
                 else:
-                    play_again=Button((204,16,0),180,420,90,30,'PLAY AGAIN')
+                    self.play_again=Button((255,0,0),180,420,90,30,'PLAY AGAIN')
                 if 320+60>pos[0]>320 and 420+30>pos[1]>420:
-                    close=Button((204,16,30),320,420,60,30,'CLOSE')
+                    self.close=Button((77,226,13),320,420,60,30,'CLOSE')
                 else:
-                    close=Button((214,37,0),320,420,60,30,'CLOSE')
+                    self.close=Button((255,0,0),320,420,60,30,'CLOSE')
             pygame.display.update()
 
 def stages():
@@ -500,7 +509,7 @@ class Button:
                 return True
         return False
 run=True
-button=Button((204,16,0),200,400,70,20,'GO')
+button=Button((77,226,13),200,400,70,20,'GO')
 smily_btn_1=Button((128,201,236),65,250,50,50)
 smily_btn_2=Button((128,201,236),135,250,50,50)
 smily_btn_3=Button((128,201,236),215,240,70,70)
@@ -555,7 +564,7 @@ while run:
                 print("SMILe 5 ")
         if 200+100>pos[0]> 200 and 400+50>pos[1]> 400:
             
-            button=Button((204,16,0),200,400,100,50,'GO!')
+            button=Button((77,226,13),200,400,100,50,'GO!')
         else:
             button=Button((214,37,33),200,400,100,50,'GO!')
     pygame.display.update()
