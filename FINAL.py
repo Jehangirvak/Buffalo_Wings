@@ -337,7 +337,6 @@ class Score:
     def __init__(self):
         pygame.init()
         self.window =pygame.display.set_mode((600,500))
-        self.sound=pygame.mixer.Sound('gallery/audio/groove.wav')
         self.Font=pygame.font.SysFont('snapITC',20)
         self.play_again=Button((202,0,0),180,420,90,30,'PLAY AGAIN')
         self.close=Button((202,0,0),320,420,60,30,'CLOSE')
@@ -434,7 +433,8 @@ class Score:
                     if self.play_again.IsOver(pos):
                         pygame.mixer.Sound(GAME_SOUNDS['click'])
                         print("clicked!!!")
-                        B=Buffalo_Wing()
+                        Obj=Buffalo_Wing()
+                        stages()
                     if self.close.IsOver(pos):
                         pygame.mixer.Sound.play(GAME_SOUNDS['click'])
                         print("clicked!!!")
