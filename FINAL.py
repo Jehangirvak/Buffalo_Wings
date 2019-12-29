@@ -529,6 +529,7 @@ def redrawWindow():
 val=0
 while run:
     redrawWindow()
+    BASE=60
     for event in pygame.event.get():
         pos=pygame.mouse.get_pos()
         if event.type==pygame.QUIT:
