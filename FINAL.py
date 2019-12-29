@@ -268,11 +268,11 @@ class Buffalo_Wing:
     if self.score>=6 and self.score<10:
       self.FPS = 32+5   #frames per second
     elif self.score>10 and self.score<15:
-      self.FPS = 32+10
+      self.FPS = 32+7
     elif self.score>15 and self.score<20:
-      self.FPS = 32+15
+      self.FPS = 32+9
     elif self.score>20:
-      self.FPS = 32+20
+      self.FPS = 32+10
     return
 
 
@@ -377,43 +377,43 @@ class Score:
         self.window.blit( self.name,[150,10])
         self.surfacefont0=self.Font.render(self.L[0],True,(255,255,255))
         self.surfacer0=self.surfacefont0.get_rect()
-        self.surfacer0.center=(250,152)
+        self.surfacer0.center=(300,152)
         self.window.blit(self.surfacefont0,self.surfacer0)
         self.surfacefont=self.Font.render(self.L[0],True,(255,16,0))
         self.surfacer=self.surfacefont.get_rect()
-        self.surfacer.center=(250,150)
+        self.surfacer.center=(300,150)
         self.window.blit(self.surfacefont,self.surfacer)
         self.surfacefont__1=self.Font.render(self.L[1],True,(255,255,255))
         self.surfacer__1=self.surfacefont__1.get_rect()
-        self.surfacer__1.center=(250,202)
+        self.surfacer__1.center=(300,202)
         self.window.blit(self.surfacefont__1,self.surfacer__1)
         self.surfacefont_1=self.Font.render(self.L[1],True,(255,16,0))
         self.surfacer_1=self.surfacefont_1.get_rect()
-        self.surfacer_1.center=(250,200)
+        self.surfacer_1.center=(300,200)
         self.window.blit(self.surfacefont_1,self.surfacer_1)
         self.surfacefont__2=self.Font.render(self.L[2],True,(255,255,255))
         self.surfacer__2=self.surfacefont__2.get_rect()
-        self.surfacer__2.center=(250,252)
+        self.surfacer__2.center=(300,252)
         self.window.blit(self.surfacefont__2,self.surfacer__2)
         self.surfacefont_2=self.Font.render(self.L[2],True,(255,16,0))
         self.surfacer_2=self.surfacefont_2.get_rect()
-        self.surfacer_2.center=(250,250)
+        self.surfacer_2.center=(300,250)
         self.window.blit(self.surfacefont_2,self.surfacer_2)
         self.surfacefont__3=self.Font.render(self.L[3],True,(255,255,255))
         self.surfacer__3=self.surfacefont__3.get_rect()
-        self.surfacer__3.center=(250,302)
+        self.surfacer__3.center=(300,302)
         self.window.blit(self.surfacefont__3,self.surfacer__3)
         self.surfacefont_3=self.Font.render(self.L[3],True,(255,16,0))
         self.surfacer_3=self.surfacefont_3.get_rect()
-        self.surfacer_3.center=(250,300)
+        self.surfacer_3.center=(300,300)
         self.window.blit(self.surfacefont_3,self.surfacer_3)
         self.surfacefont_t=self.Font.render(self.depends,True,(255,255,255))
         self.surfacer_t=self.surfacefont_t.get_rect()
-        self.surfacer_t.center=(250,352)
+        self.surfacer_t.center=(300,352)
         self.window.blit(self.surfacefont_t,self.surfacer_t)
         self.surfacefont_T=self.Font.render(self.depends,True,(255,16,0))
         self.surfacer_T=self.surfacefont_T.get_rect()
-        self.surfacer_T.center=(250,350)
+        self.surfacer_T.center=(300,350)
         self.window.blit(self.surfacefont_T,self.surfacer_T)
         
         
@@ -466,10 +466,16 @@ def stages():
   else:
     Obj=Score()
     Obj.while_loop()
+    
 pygame.init()
 win =pygame.display.set_mode((500,500))
 GAME_SOUNDS['click']=pygame.mixer.Sound('gallery/audio/groove.wav')
 GAME_SOUNDS['play_btn']=pygame.mixer.Sound('gallery/audio/play_btn.wav')
+GAME_SOUNDS['bull']=pygame.mixer.Sound('gallery/audio/bull.wav')
+GAME_SOUNDS['evil']=pygame.mixer.Sound('gallery/audio/evil.wav')
+GAME_SOUNDS['cartoon']=pygame.mixer.Sound('gallery/audio/cartoon.wav')
+GAME_SOUNDS['star']=pygame.mixer.Sound('gallery/audio/star.wav')
+
 class Button:
     def __init__(self,color,x,y,width,height,text=''):
         self.color=color
@@ -538,7 +544,7 @@ while run:
             if smily_btn_1.IsOver(pos):
               i=0
               Buffalo_Wing.PLAYER=img.playerimg_base()
-              pygame.mixer.Sound.play(GAME_SOUNDS['play_btn'])
+              pygame.mixer.Sound.play(GAME_SOUNDS['star'])
               val=i+1
               print("SMILe 1 ")
             elif smily_btn_2.IsOver(pos):
@@ -548,20 +554,20 @@ while run:
               Buffalo_Wing.PLAYER=img.playerimg_base()
               print("SMILe 2 ")
             elif smily_btn_3.IsOver(pos):
-              pygame.mixer.Sound.play(GAME_SOUNDS['play_btn'])
+              pygame.mixer.Sound.play(GAME_SOUNDS['bull'])
               i=2
               val=i+1
               Buffalo_Wing.PLAYER=img.playerimg_base()       
               print("SMILe 3 ")
               
             elif smily_btn_4.IsOver(pos):
-              pygame.mixer.Sound.play(GAME_SOUNDS['play_btn'])
+              pygame.mixer.Sound.play(GAME_SOUNDS['evil'])
               i=3
               val=i+1
               Buffalo_Wing.PLAYER=img.playerimg_base()
               print("SMILe 3 ")
             elif smily_btn_5.IsOver(pos):
-              pygame.mixer.Sound.play(GAME_SOUNDS['play_btn'])
+              pygame.mixer.Sound.play(GAME_SOUNDS['cartoon'])
               i=4
               val=i+1
               Buffalo_Wing.PLAYER=img.playerimg_base()
@@ -598,18 +604,18 @@ while run:
         else:
           smily_btn_5=Button((128,201,236),380,250,50,50)
     if val==1:
-      select_btn=Button((77,226,13),350,380,145,30,'Avatar  1  selected')
+      select_btn=Button((0,128,0),350,380,145,30,'Avatar  1  selected')
       select_btn.draw(win,12,(249,248,194))
     elif val ==2:
-      select_btn=Button((77,226,13),350,380,145,30,'Avatar  2  selected')
+      select_btn=Button((0,128,0),350,380,145,30,'Avatar  2  selected')
       select_btn.draw(win,12,(249,248,194))
     elif val==3:
-      select_btn=Button((77,226,13),350,380,145,30,'Avatar  3  selected')
+      select_btn=Button((0,128,0),350,380,145,30,'Avatar  3  selected')
       select_btn.draw(win,12,(249,248,194))
     elif val==4:
-      select_btn=Button((77,226,13),350,380,145,30,'Avatar  4  selected')
+      select_btn=Button((0,128,0),350,380,145,30,'Avatar  4  selected')
       select_btn.draw(win,12,(249,248,194))
     elif val==5:
-      select_btn=Button((77,226,13),350,380,145,30,'Avatar  5  selected')
+      select_btn=Button((0,128,0),350,380,145,30,'Avatar  5  selected')
       select_btn.draw(win,12,(249,248,194))
     pygame.display.update()
