@@ -12,8 +12,7 @@ GROUNDY = SCREENHEIGHT * 0.84  #base.png 84% height
 GAME_SPRITES = {} #images used in game
 GAME_SOUNDS = {}  #sounds used in game
 
-i=2
-#initialising the images rendered in the game
+i=2    #initialising the images rendered in the game
 class images:
   def __init__(self):
     self.Playerimg=[ 'gallery/sprites/smile1.png','gallery/sprites/smile2.png', 'gallery/sprites/bull-big.png',
@@ -38,7 +37,6 @@ class images:
 
 img=images()
 BASE=60         #the base of the avatar 
-BACKGROUND= 'gallery/sprites/background.png'
 PIPE= img.pipeimg()
 
 #added queue data structure to points on the basis of FIFO rule
@@ -76,6 +74,8 @@ class Point_Queue:
 class Buffalo_Wing:
   scorequeue=Point_Queue()
   def __init__(self):
+    self.BACKGROUNDlist=[('gallery/sprites/bg1.png'),('gallery/sprites/bg2.png'),('gallery/sprites/bg3.png')] #list of different backgrounds
+    self.BACKGROUND= 'gallery/sprites/background.png'
     self.PLAYER= img.playerimg_base()
     self.crash_avatar=['gallery/sprites/smile5.png','gallery/sprites/smile4.png']
     self.FPS = 32   #frames per second
@@ -103,9 +103,8 @@ class Buffalo_Wing:
     GAME_SPRITES['message'] =pygame.image.load('gallery/sprites/message.png').convert_alpha()
     GAME_SPRITES['base'] =pygame.image.load('gallery/sprites/base.png').convert_alpha()
     GAME_SPRITES['pipe'] =(pygame.transform.rotate(pygame.image.load(PIPE).convert_alpha(), 180), 
-    pygame.image.load(PIPE).convert_alpha()
-    ) #two elements in tuple, to rotate the pipe
-    GAME_SPRITES['background'] = pygame.image.load(BACKGROUND).convert()
+    pygame.image.load(PIPE).convert_alpha()) #two elements in tuple, to rotate the pipe
+    GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert()
     GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
 
       # Game sounds
@@ -175,7 +174,6 @@ class Buffalo_Wing:
     ]
 
     self.pipeVelX = -4 #velocity of pipes moving backwards
-
     self.playerVelY = -9 #velocity of bird falling down
     self.playerMaxVelY = 10 #max up arrow/space velocity
     self.playerMinVelY = -8
@@ -212,7 +210,7 @@ class Buffalo_Wing:
                 self.score +=1
                 print(self.score)
                 GAME_SOUNDS['point'].play()
-                if self.score>10:
+                if self.score>5:
                   self.incSpeed()
 
 
@@ -265,14 +263,25 @@ class Buffalo_Wing:
     """
     To increase the speed with respect to increasing score
     """
-    if self.score>=6 and self.score<10:
+    if self.score>=6 and self.score<=10:
+      self.BACKGROUND=self.BACKGROUNDlist[0]
+      GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert()
+      self.SCREEN.blit(GAME_SPRITES['background'], (0, 0))
+      pygame.display.update()
       self.FPS = 32+5   #frames per second
     elif self.score>10 and self.score<15:
+      self.BACKGROUND=self.BACKGROUNDlist[1]
+      GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert()
+      self.SCREEN.blit(GAME_SPRITES['background'], (0, 0))
+      pygame.display.update()
       self.FPS = 32+7
-    elif self.score>15 and self.score<20:
-      self.FPS = 32+9
-    elif self.score>20:
-      self.FPS = 32+10
+    else:
+      if (self.score%5)==0:
+        self.BACKGROUND=random.choice(self.BACKGROUNDlist)
+        GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert()
+        self.SCREEN.blit(GAME_SPRITES['background'], (0, 0))
+        pygame.display.update()
+        self.FPS=self.FPS+1
     return
 
 
@@ -291,6 +300,8 @@ class Buffalo_Wing:
           GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
           self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
           pygame.display.update()
+        self.SCREEN.blit(GAME_SPRITES['message'], (self.messagex,self.messagey))       
+        pygame.display.update()  #runs all the blits
         return True
     
     for pipe in self.upperPipes:
@@ -302,6 +313,8 @@ class Buffalo_Wing:
               GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
               self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
               pygame.display.update()
+            self.SCREEN.blit(GAME_SPRITES['message'], (self.messagex,self.messagey))       
+            pygame.display.update()  #runs all the blits
             return True
 
     for pipe in self.lowerPipes:
@@ -312,6 +325,8 @@ class Buffalo_Wing:
               GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
               self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
               pygame.display.update()
+            self.SCREEN.blit(GAME_SPRITES['message'], (self.messagex,self.messagey))       
+            pygame.display.update()  #runs all the blits
             return True
 
     return False
@@ -356,17 +371,19 @@ class Score:
           self.L.append(self.statement)
           print(self.score)
           
-          if self.score>=25:
-              self.depends="WELL PLAYED! with a great total score of "+str(self.score)
-          elif self.score>=20:
-              self.depends="Nicely played! with a total score of " + str(self.score)
-          elif self.score>=15:
-              self.depends="Good! your total score is "+ str(self.score)
-          elif self.score>=10:
-              self.depends="Average! your total score is "+ str(self.score)
-          elif self.score<5:
-              self.depends="Poorly played! your total score is "+ str(self.score)
-          print(self.L)
+        if self.score>=25:
+          self.depends="WELL PLAYED! with a great total score of "+str(self.score)
+        elif self.score>=20:
+            self.depends="Nicely played! with a total score of " + str(self.score)
+        elif self.score>=15:
+            self.depends="Good! your total score is "+ str(self.score)
+        elif self.score>=10:
+            self.depends="Average! your total score is "+ str(self.score)
+        elif self.score>=1:
+            self.depends="Poorly played! your total score is "+ str(self.score)
+        else:
+          self.depends="Pathetically played! You scored nothing!"
+        print(self.L)
     def endwin(self):
         self.window.fill((255,255,255))
         self.image = pygame.image.load('gallery/sprites/bg.png').convert_alpha()
@@ -459,8 +476,6 @@ def stages():
   chances=0
   while chances <3 :
     if obj.crashTest==True:
-      global BACKGROUND
-      BACKGROUND=BACKGROUNDlist[chances]
       chances+=1
       objB=Buffalo_Wing()
   else:
