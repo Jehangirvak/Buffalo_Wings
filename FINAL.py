@@ -31,6 +31,7 @@ class images:
 img=images()
 BASE=60         #the base of the avatar 
 PIPE= 'gallery/sprites/pipe.png'
+PLAYER= None
 
 #added queue data structure to points on the basis of FIFO rule
 class Point_Queue:
@@ -59,7 +60,6 @@ class Buffalo_Wing:
   def __init__(self):
     self.BACKGROUNDlist=['gallery/sprites/bg1.png','gallery/sprites/bg2.png','gallery/sprites/bg3.png'] #list of different backgrounds
     self.BACKGROUND= 'gallery/sprites/background.png'
-    self.PLAYER= img.playerimg_base()
     self.crash_avatar=['gallery/sprites/smile5.png','gallery/sprites/smile4.png']
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
@@ -87,7 +87,7 @@ class Buffalo_Wing:
     GAME_SPRITES['pipe'] =(pygame.transform.rotate(pygame.image.load(PIPE).convert_alpha(), 180), 
     pygame.image.load(PIPE).convert_alpha())   #two elements in tuple, to rotate the pipe
     GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert_alpha()
-    GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
+    GAME_SPRITES['player'] = pygame.image.load(PLAYER).convert_alpha()
 
       # Game sounds
     GAME_SOUNDS['die'] = pygame.mixer.Sound('gallery/audio/die.wav')
@@ -278,8 +278,8 @@ class Buffalo_Wing:
     if self.playery> GROUNDY - BASE  or self.playery<0:
         GAME_SOUNDS['hit'].play()
         if BASE != 45 :
-          self.PLAYER='gallery/sprites/smile6.png' 
-          GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
+          PLAYER='gallery/sprites/smile6.png' 
+          GAME_SPRITES['player'] = pygame.image.load(PLAYER).convert_alpha()
           self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
           pygame.display.update()
           time.sleep(1)
@@ -291,12 +291,12 @@ class Buffalo_Wing:
         self.pipeHeight = GAME_SPRITES['pipe'][0].get_height()
         if(self.playery < self.pipeHeight + pipe['y'] and abs(self.playerx - pipe['x']) < GAME_SPRITES['pipe'][0].get_width()):
             GAME_SOUNDS['hit'].play()
-            if BASE != 25 and BASE != 45 :
+            if BASE != 45 :
               self.PLAYER=random.choice(self.crash_avatar)
               GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
               self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
               pygame.display.update()
-              time.sleep(1)
+              time.sleep(0.75)
             self.SCREEN.blit(GAME_SPRITES['message'], (self.messagex,self.messagey))       
             pygame.display.update()  #runs all the blits
             return True
@@ -304,9 +304,9 @@ class Buffalo_Wing:
     for pipe in self.lowerPipes:
         if (self.playery + GAME_SPRITES['player'].get_height() > pipe['y']) and abs(self.playerx - pipe['x']) < GAME_SPRITES['pipe'][0].get_width():
             GAME_SOUNDS['hit'].play()
-            if BASE != 25 and BASE != 45 :
-              self.PLAYER=random.choice(self.crash_avatar)
-              GAME_SPRITES['player'] = pygame.image.load(self.PLAYER).convert_alpha()
+            if BASE != 45 :
+              PLAYER=random.choice(self.crash_avatar)
+              GAME_SPRITES['player'] = pygame.image.load(PLAYER).convert_alpha()
               self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
               pygame.display.update()
               time.sleep(1)
@@ -340,7 +340,6 @@ class Score:
         self.Font=pygame.font.SysFont('snapITC',20)
         self.play_again=Button((202,0,0),180,420,90,30,'PLAY AGAIN')
         self.close=Button((202,0,0),320,420,60,30,'CLOSE')
-        self.home=Button((150,223,178),15,15,55,55)
         self.depends=str()
         self.statement=str()
         self.score= 0
@@ -375,10 +374,6 @@ class Score:
         self.image = pygame.image.load('gallery/sprites/bg.png').convert_alpha()
         self.window.blit(self.image,(0,0))
         self.play_again.draw(self.window,10,(249,248,194))
-        self.homeimg = pygame.image.load('gallery/sprites/home.png').convert_alpha()
-        
-        self.home.draw(self.window,(150,223,178))
-        self.window.blit(self.homeimg,(15,15))
         self.close.draw(self.window,10,(249,248,194))
         self.name=pygame.image.load('gallery/sprites/name.png').convert_alpha()
         self.window.blit( self.name,[150,10])
@@ -442,10 +437,6 @@ class Score:
                         print("clicked!!!")
                         Obj=Buffalo_Wing()
                         stages()
-                    if self.home.IsOver(pos):
-                        pygame.mixer.Sound(GAME_SOUNDS['click'])
-                        print("clicked!!!")
-                        import FINAL
                     if self.close.IsOver(pos):
                         pygame.mixer.Sound.play(GAME_SOUNDS['click'])
                         print("clicked!!!")
@@ -595,12 +586,17 @@ while run:
             
             if button.IsOver(pos):
                 print("clicked!!!")
+                if PLAYER==None:
+                  i=2
+                  PLAYER=img.playerimg_base()
+                elif i==2:
+                   BASE=45
                 pygame.mixer.Sound.play(GAME_SOUNDS['click'])
                 obj=Buffalo_Wing()
                 stages()
-            if smily_btn_1.IsOver(pos):
+            elif smily_btn_1.IsOver(pos):
               i=0
-              Buffalo_Wing.PLAYER=img.playerimg_base()
+              PLAYER=img.playerimg_base()
               pygame.mixer.Sound.play(GAME_SOUNDS['star'])
               val=i+1
               print("SMILe 1 ")
@@ -608,30 +604,26 @@ while run:
               pygame.mixer.Sound.play(GAME_SOUNDS['play_btn'])
               i=1
               val=i+1
-              Buffalo_Wing.PLAYER=img.playerimg_base()
+              PLAYER=img.playerimg_base()
               print("SMILe 2 ")
             elif smily_btn_3.IsOver(pos):
               pygame.mixer.Sound.play(GAME_SOUNDS['bull'])
               i=2
               val=i+1
-              Buffalo_Wing.PLAYER=img.playerimg_base()       
-              print("SMILe 3 ")
-              
+              PLAYER=img.playerimg_base()       
+              print("BULL")
             elif smily_btn_4.IsOver(pos):
               pygame.mixer.Sound.play(GAME_SOUNDS['evil'])
               i=3
               val=i+1
-              Buffalo_Wing.PLAYER=img.playerimg_base()
+              PLAYER=img.playerimg_base()
               print("SMILe 3 ")
             elif smily_btn_5.IsOver(pos):
               pygame.mixer.Sound.play(GAME_SOUNDS['cartoon'])
               i=4
               val=i+1
-              Buffalo_Wing.PLAYER=img.playerimg_base()
+              PLAYER=img.playerimg_base()
               print("SMILe 4 ")
-            else:
-              i=2
-              Buffalo_Wing.PLAYER=img.playerimg_base()
         if 250+125>pos[0]>250 and 400+50>pos[1]>400:
             htp=Button((77,226,13),250,400,125,50,'HELP!')
         else:
@@ -696,5 +688,10 @@ while not run:
             if forward.IsOver(pos):
                run=True
                pygame.mixer.Sound.play(GAME_SOUNDS['click'])
+               if PLAYER==None:
+                  i=2
+                  PLAYER=img.playerimg_base()
+               elif i==2:
+                 BASE=45  
                obj=Buffalo_Wing()
                stages()
