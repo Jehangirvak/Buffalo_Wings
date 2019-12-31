@@ -14,17 +14,17 @@ GAME_SOUNDS = {}  #sounds used in game
 i=2    #initialising the images rendered in the game
 class images:
   def __init__(self):
-    self.Playerimg=[ 'gallery/sprites/smile1.png','gallery/sprites/smile2.png', 'gallery/sprites/bull-big.png',
-                    'gallery/sprites/smile7.png','gallery/sprites/smile3.png']  #list containing avatar images and their base values
+    self.Playerimg=('gallery/sprites/smile1.png','gallery/sprites/smile2.png', 'gallery/sprites/bull-big.png',
+                    'gallery/sprites/smile7.png','gallery/sprites/smile3.png')  #tuple containing avatar images and their base values
 
   def playerimg_base(self):
+    """
+    Returns the image of avatar that player chose
+    """
     global i
     global BASE
     if i==2:
       BASE=45
-    """
-    Returns the image of avatar that player chose
-    """
     return self.Playerimg[i]
     
 
@@ -58,9 +58,9 @@ class Point_Queue:
 class Buffalo_Wing:
   scorequeue=Point_Queue()
   def __init__(self):
-    self.BACKGROUNDlist=['gallery/sprites/bg1.png','gallery/sprites/bg2.png','gallery/sprites/bg3.png'] #list of different backgrounds
+    self.BACKGROUNDlist=('gallery/sprites/bg1.png','gallery/sprites/bg2.png','gallery/sprites/bg3.png')#list of different backgrounds
     self.BACKGROUND= 'gallery/sprites/background.png'
-    self.crash_avatar=['gallery/sprites/smile5.png','gallery/sprites/smile4.png']
+    self.crash_avatar=('gallery/sprites/smile5.png','gallery/sprites/smile4.png')
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
     GAME_SPRITES['message'] =pygame.image.load('gallery/sprites/message.png').convert_alpha()
@@ -376,7 +376,7 @@ class Score:
         self.play_again.draw(self.window,10,(249,248,194))
         self.close.draw(self.window,10,(249,248,194))
         self.name=pygame.image.load('gallery/sprites/name.png').convert_alpha()
-        self.window.blit( self.name,[150,10])
+        self.window.blit(self.name,[150,10])
         self.surfacefont0=self.Font.render(self.L[0],True,(255,255,255))
         self.surfacer0=self.surfacefont0.get_rect()
         self.surfacer0.center=(300,152)
@@ -453,7 +453,7 @@ class Score:
                 else:
                     self.close=Button((255,0,0),320,420,60,30,'CLOSE')
             pygame.display.update()
-BACKGROUNDlist=[('gallery/sprites/bg1.png'),('gallery/sprites/bg2.png'),('gallery/sprites/bg3.png')] #list of different backgrounds
+
 def stages():
   """
   Generate 5 chances of the player
