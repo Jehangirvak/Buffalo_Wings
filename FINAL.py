@@ -10,21 +10,29 @@ SCREENHEIGHT = 560
 GROUNDY = SCREENHEIGHT * 0.84  #base.png 84% height
 GAME_SPRITES = {} #images used in game
 GAME_SOUNDS = {}  #sounds used in game
+GAME_SPRITES['smile1']='gallery/sprites/smile1.png'
+GAME_SPRITES['smile2']='gallery/sprites/smile2.png'
+GAME_SPRITES['smile3']='gallery/sprites/bull-big.png'
+GAME_SPRITES['smile4']='gallery/sprites/smile7.png'
+GAME_SPRITES['smile5']='gallery/sprites/smile3.png'
+GAME_SPRITES['crash1']='gallery/sprites/smile5.png'
+GAME_SPRITES['crash2']='gallery/sprites/smile4.png'
+GAME_SPRITES['bull']='gallery/sprites/bull_main.png'
+
 
 i=2    #initialising the images rendered in the game
 class images:
   def __init__(self):
-    self.Playerimg=('gallery/sprites/smile1.png','gallery/sprites/smile2.png', 'gallery/sprites/bull-big.png',
-                    'gallery/sprites/smile7.png','gallery/sprites/smile3.png')  #tuple containing avatar images and their base values
+    self.Playerimg=[GAME_SPRITES['smile1'],GAME_SPRITES['smile2'],GAME_SPRITES['smile3'],GAME_SPRITES['smile4'],GAME_SPRITES['smile5']]  #list containing avatar images and their base values
 
   def playerimg_base(self):
-    """
-    Returns the image of avatar that player chose
-    """
     global i
     global BASE
     if i==2:
       BASE=45
+    """
+    Returns the image of avatar that player chose
+    """
     return self.Playerimg[i]
     
 
@@ -58,9 +66,9 @@ class Point_Queue:
 class Buffalo_Wing:
   scorequeue=Point_Queue()
   def __init__(self):
-    self.BACKGROUNDlist=('gallery/sprites/bg1.png','gallery/sprites/bg2.png','gallery/sprites/bg3.png')#list of different backgrounds
+    self.BACKGROUNDlist=['gallery/sprites/bg1.png','gallery/sprites/bg2.png','gallery/sprites/bg3.png'] #list of different backgrounds
     self.BACKGROUND= 'gallery/sprites/background.png'
-    self.crash_avatar=('gallery/sprites/smile5.png','gallery/sprites/smile4.png')
+    self.crash_avatar=[GAME_SPRITES['crash1'],GAME_SPRITES['crash2']]
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
     GAME_SPRITES['message'] =pygame.image.load('gallery/sprites/message.png').convert_alpha()
@@ -247,20 +255,20 @@ class Buffalo_Wing:
     """
     if self.score>=6 and self.score<=10:
       self.BACKGROUND=self.BACKGROUNDlist[0]
-      GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert()
+      GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert_alpha()
       self.SCREEN.blit(GAME_SPRITES['background'], (0, 0))
       pygame.display.update()
-      self.FPS = 32+5   #frames per second
+      self.FPS = 32+2   #frames per second
     elif self.score>10 and self.score<15:
       self.BACKGROUND=self.BACKGROUNDlist[1]
-      GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert()
+      GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert_alpha()
       self.SCREEN.blit(GAME_SPRITES['background'], (0, 0))
       pygame.display.update()
-      self.FPS = 32+7
+      self.FPS = 32+4
     else:
       if (self.score%5)==0:
         self.BACKGROUND=random.choice(self.BACKGROUNDlist)
-        GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert()
+        GAME_SPRITES['background'] = pygame.image.load(self.BACKGROUND).convert_alpha()
         self.SCREEN.blit(GAME_SPRITES['background'], (0, 0))
         pygame.display.update()
         self.FPS=self.FPS+1
@@ -354,8 +362,7 @@ class Score:
           self.score=self.score+indiv_score
           self.statement= 'The score of round '+str(rounds+1)+' is: '+str(indiv_score)+'!'
           self.L.append(self.statement)
-          print(self.score)
-          
+          print(self.statement)
         if self.score>=25:
           self.depends="WELL PLAYED! with a great total score of "+str(self.score)
         elif self.score>=20:
@@ -370,13 +377,12 @@ class Score:
           self.depends="Pathetically played! You scored nothing!"
         print(self.L)
     def endwin(self):
-        self.window.fill((255,255,255))
-        self.image = pygame.image.load('gallery/sprites/bg.png').convert_alpha()
+        self.image = pygame.image.load(GAME_SPRITES['bg']).convert_alpha()
         self.window.blit(self.image,(0,0))
         self.play_again.draw(self.window,10,(249,248,194))
         self.close.draw(self.window,10,(249,248,194))
-        self.name=pygame.image.load('gallery/sprites/name.png').convert_alpha()
-        self.window.blit(self.name,[150,10])
+        self.name=pygame.image.load(GAME_SPRITES['name']).convert_alpha()
+        self.window.blit( self.name,[150,10])
         self.surfacefont0=self.Font.render(self.L[0],True,(255,255,255))
         self.surfacer0=self.surfacefont0.get_rect()
         self.surfacer0.center=(300,152)
@@ -416,10 +422,7 @@ class Score:
         self.surfacefont_T=self.Font.render(self.depends,True,(255,16,0))
         self.surfacer_T=self.surfacefont_T.get_rect()
         self.surfacer_T.center=(300,350)
-        self.window.blit(self.surfacefont_T,self.surfacer_T)
-        
-        
-        
+        self.window.blit(self.surfacefont_T,self.surfacer_T)        
     def while_loop(self):
         
         x=True
@@ -453,7 +456,7 @@ class Score:
                 else:
                     self.close=Button((255,0,0),320,420,60,30,'CLOSE')
             pygame.display.update()
-
+BACKGROUNDlist=[('gallery/sprites/bg1.png'),('gallery/sprites/bg2.png'),('gallery/sprites/bg3.png')] #list of different backgrounds
 def stages():
   """
   Generate 5 chances of the player
@@ -508,42 +511,45 @@ smily_btn_3=Button((128,201,236),215,240,70,70)
 smily_btn_4=Button((128,201,236),309,250,50,50)
 smily_btn_5=Button((128,201,236),380,250,50,50)
 forward=Button((240,192,84),470,370,55,55)
-def redrawWindow():
-    win.fill((255,255,255))
-    img = pygame.image.load('gallery/sprites/message1.png').convert_alpha()
+GAME_SPRITES['msg1']='gallery/sprites/message1.png'
+def MAINWindow():
+    img = pygame.image.load(GAME_SPRITES['msg1']).convert_alpha()
     win.blit(img,(0,0))
-    smile_1=pygame.image.load('gallery/sprites/smile1.png').convert_alpha()
+    smile_1=pygame.image.load(GAME_SPRITES['smile1']).convert_alpha()
     smily_btn_1.draw(win)
     win.blit( smile_1,[64,250])
-    smile_2=pygame.image.load('gallery/sprites/smile2.png').convert_alpha()
+    smile_2=pygame.image.load(GAME_SPRITES['smile2']).convert_alpha()
     smily_btn_2.draw(win)
     win.blit( smile_2,[135,250])
-    smile_3=pygame.image.load('gallery/sprites/bull_main.png').convert_alpha()
+    smile_3=pygame.image.load(GAME_SPRITES['bull']).convert_alpha()
     smily_btn_3.draw(win)
     win.blit( smile_3,[213,240])
-    smile_4=pygame.image.load('gallery/sprites/smile7.png').convert_alpha()
+    smile_4=pygame.image.load(GAME_SPRITES['smile4']).convert_alpha()
     smily_btn_4.draw(win)
     win.blit( smile_4,[310,250])
-    smile_5=pygame.image.load('gallery/sprites/smile3.png').convert_alpha()
+    smile_5=pygame.image.load(GAME_SPRITES['smile5']).convert_alpha()
     smily_btn_5.draw(win)
     win.blit( smile_5,[380,250])
     button.draw(win,40,(249,248,194))
     htp.draw(win,29,(249,248,194))
-class HOW:
+GAME_SPRITES['bg']='gallery/sprites/bg.png'
+GAME_SPRITES['name']='gallery/sprites/name.png'
+GAME_SPRITES['back']='gallery/sprites/back.png'
+GAME_SPRITES['fwd']='gallery/sprites/forward.png'
+class HELP:
   def __init__(self):
         pygame.init()
         self.window =pygame.display.set_mode((600,500))
         self.Font=pygame.font.SysFont('Ariel',23)
-        self.window.fill((255,255,255))
-        self.img=pygame.image.load('gallery/sprites/bg.png').convert_alpha()
+        self.img=pygame.image.load(GAME_SPRITES['bg']).convert_alpha()
         self.window.blit(self.img,(0,0))
-        self.name=pygame.image.load('gallery/sprites/name.png').convert_alpha()
+        self.name=pygame.image.load(GAME_SPRITES['name']).convert_alpha()
         self.window.blit( self.name,[150,10])
-        backimg=pygame.image.load('gallery/sprites/back.png').convert_alpha()
+        backimg=pygame.image.load(GAME_SPRITES['back']).convert_alpha()
         back.draw(self.window)
         if __name__ == "__main__":
             self.window.blit( backimg,[65,370])
-        fwd=pygame.image.load('gallery/sprites/forward.png').convert_alpha()
+        fwd=pygame.image.load(GAME_SPRITES['fwd']).convert_alpha()
         forward.draw(self.window)
         self.window.blit( fwd,[470,370])
         pygame.display.update()
@@ -564,11 +570,10 @@ class HOW:
             self.window.blit(self.t,self.t1)
             pygame.display.update()
         
-
 val=0
 run = True
 while run:
-    redrawWindow()
+    MAINWindow()
     BASE=60
     for event in pygame.event.get():
         pos=pygame.mouse.get_pos()
@@ -579,7 +584,7 @@ while run:
         if event.type==pygame.MOUSEBUTTONDOWN:
             if htp.IsOver(pos):
                 pygame.mixer.Sound.play(GAME_SOUNDS['click'])
-                object1=HOW()
+                object1=HELP()
                 object1.render_multi_line()
                 done =True
                 run=False
@@ -695,3 +700,4 @@ while not run:
                  BASE=45  
                obj=Buffalo_Wing()
                stages()
+
