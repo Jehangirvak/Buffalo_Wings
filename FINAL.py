@@ -23,7 +23,7 @@ GAME_SPRITES['bull']='gallery/sprites/bull_main.png'
 i=2    #initialising the images rendered in the game
 class images:
   def __init__(self):
-    self.Playerimg=[GAME_SPRITES['smile1'],GAME_SPRITES['smile2'],GAME_SPRITES['smile3'],GAME_SPRITES['smile4'],GAME_SPRITES['smile5']]  #list containing avatar images and their base values
+    self.Playerimg=(GAME_SPRITES['smile1'],GAME_SPRITES['smile2'],GAME_SPRITES['smile3'],GAME_SPRITES['smile4'],GAME_SPRITES['smile5'])  #list containing avatar images and their base values
 
   def playerimg_base(self):
     global i
@@ -66,9 +66,9 @@ class Point_Queue:
 class Buffalo_Wing:
   scorequeue=Point_Queue()
   def __init__(self):
-    self.BACKGROUNDlist=['gallery/sprites/bg1.png','gallery/sprites/bg2.png','gallery/sprites/bg3.png'] #list of different backgrounds
+    self.BACKGROUNDlist=('gallery/sprites/bg1.png','gallery/sprites/bg2.png','gallery/sprites/bg3.png') #list of different backgrounds
     self.BACKGROUND= 'gallery/sprites/background.png'
-    self.crash_avatar=[GAME_SPRITES['crash1'],GAME_SPRITES['crash2']]
+    self.crash_avatar=(GAME_SPRITES['crash1'],GAME_SPRITES['crash2'])
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
     GAME_SPRITES['message'] =pygame.image.load('gallery/sprites/message.png').convert_alpha()
@@ -700,4 +700,3 @@ while not run:
                  BASE=45  
                obj=Buffalo_Wing()
                stages()
-
