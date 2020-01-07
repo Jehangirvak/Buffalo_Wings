@@ -10,6 +10,12 @@ SCREENHEIGHT = 560
 GROUNDY = SCREENHEIGHT * 0.84  #base.png 84% height
 GAME_SPRITES = {} #images used in game
 GAME_SOUNDS = {}  #sounds used in game
+GAME_SPRITES['smi1']='gallery/sprites/smi1.png'
+GAME_SPRITES['smi2']='gallery/sprites/smi2.png'
+GAME_SPRITES['smi4']='gallery/sprites/smi7.png'
+GAME_SPRITES['smi5']='gallery/sprites/smi3.png'
+GAME_SPRITES['crashh1']='gallery/sprites/smi5.png'
+GAME_SPRITES['crashh2']='gallery/sprites/smi4.png'
 GAME_SPRITES['smile1']='gallery/sprites/smile1.png'
 GAME_SPRITES['smile2']='gallery/sprites/smile2.png'
 GAME_SPRITES['smile3']='gallery/sprites/bull-big.png'
@@ -23,7 +29,7 @@ GAME_SPRITES['bull']='gallery/sprites/bull_main.png'
 i=2    #initialising the images rendered in the game
 class images:
   def __init__(self):
-    self.Playerimg=(GAME_SPRITES['smile1'],GAME_SPRITES['smile2'],GAME_SPRITES['smile3'],GAME_SPRITES['smile4'],GAME_SPRITES['smile5'])  #list containing avatar images and their base values
+    self.Playerimg=(GAME_SPRITES['smi1'],GAME_SPRITES['smi2'],GAME_SPRITES['smile3'],GAME_SPRITES['smi4'],GAME_SPRITES['smi5'])  #list containing avatar images and their base values
 
   def playerimg_base(self):
     global i
@@ -68,7 +74,7 @@ class Buffalo_Wing:
   def __init__(self):
     self.BACKGROUNDlist=('gallery/sprites/bg1.png','gallery/sprites/bg2.png','gallery/sprites/bg3.png') #list of different backgrounds
     self.BACKGROUND= 'gallery/sprites/background.png'
-    self.crash_avatar=(GAME_SPRITES['crash1'],GAME_SPRITES['crash2'])
+    self.crash_avatar=(GAME_SPRITES['crashh1'],GAME_SPRITES['crashh2'])
     self.FPS = 32   #frames per second
     self.SCREEN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))  #initialise screen
     GAME_SPRITES['message'] =pygame.image.load('gallery/sprites/message.png').convert_alpha()
@@ -286,7 +292,7 @@ class Buffalo_Wing:
     if self.playery> GROUNDY - BASE  or self.playery<0:
         GAME_SOUNDS['hit'].play()
         if BASE != 45 :
-          PLAYER='gallery/sprites/smile6.png' 
+          PLAYER='gallery/sprites/smi6.png' 
           GAME_SPRITES['player'] = pygame.image.load(PLAYER).convert_alpha()
           self.SCREEN.blit(GAME_SPRITES['player'], (self.playerx, self.playery))
           pygame.display.update()
@@ -700,3 +706,4 @@ while not run:
                  BASE=45  
                obj=Buffalo_Wing()
                stages()
+               
