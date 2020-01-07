@@ -43,7 +43,7 @@ class images:
     
 
 img=images()
-BASE=60         #the base of the avatar 
+BASE=55         #the base of the avatar 
 PIPE= 'gallery/sprites/pipe.png'
 PLAYER= None
 
@@ -706,4 +706,3 @@ while not run:
                  BASE=45  
                obj=Buffalo_Wing()
                stages()
-               
